@@ -1,2 +1,2 @@
 import streamlit as st 
-st.tiltle('나의 첫 streamlist')
+st.title('나의 첫 streamlist')
