@@ -1,35 +1,36 @@
 import streamlit as st
 
-# MBTI별 직업 추천 데이터
+# MBTI별 직업 추천 데이터 (추천 이유도 추가!)
 job_recommendations = {
-    "ISTJ": ["회계사", "변호사", "행정가", "은행원"],
-    "ISFJ": ["간호사", "사회복지사", "교사", "비서"],
-    "INFJ": ["심리상담가", "작가", "교수", "예술가"],
-    "INTJ": ["과학자", "전략기획가", "엔지니어", "데이터 분석가"],
-    "ISTP": ["파일럿", "경찰관", "기계공", "스포츠 선수"],
-    "ISFP": ["디자이너", "음악가", "요리사", "작가"],
-    "INFP": ["상담가", "작가", "교사", "예술가"],
-    "INTP": ["연구원", "개발자", "철학자", "과학자"],
-    "ESTP": ["기업가", "세일즈 매니저", "운동선수", "소방관"],
-    "ESFP": ["배우", "MC", "이벤트 기획자", "스타일리스트"],
-    "ENFP": ["광고기획자", "작가", "언론인", "강연가"],
-    "ENTP": ["기업가", "발명가", "변호사", "컨설턴트"],
-    "ESTJ": ["경영자", "군인", "판사", "프로젝트 매니저"],
-    "ESFJ": ["교사", "간호사", "상담가", "서비스 매니저"],
-    "ENFJ": ["교육자", "리더십 코치", "홍보전문가", "정치가"],
-    "ENTJ": ["CEO", "변호사", "전략가", "경영컨설턴트"]
+    "ISTJ": [("🧾 회계사", "체계적이고 꼼꼼한 성격에 잘 맞아요!"),
+             ("⚖️ 변호사", "논리적 사고와 책임감이 강한 성격에 적합해요!")],
+    "ENFP": [("🎤 광고기획자", "창의적이고 에너지가 넘쳐 새로운 아이디어 발굴에 강점이 있어요!"),
+             ("📰 언론인", "열정적으로 세상과 소통하고 싶어하는 성향과 잘 맞아요!")],
+    "INTP": [("🔬 연구원", "탐구심 많고 분석적인 사고력으로 과학적 발견을 이끌어요!"),
+             ("💻 개발자", "논리적이고 독창적인 아이디어로 새로운 프로그램을 만들어낼 수 있어요!")],
+    "ESFP": [("🎭 배우", "에너지가 넘치고 사람들 앞에서 빛나는 성격!"),
+             ("🎉 이벤트 기획자", "모든 순간을 즐겁게 만드는 능력이 있어요!")],
+    "ENTJ": [("👔 CEO", "리더십과 추진력으로 조직을 이끌기에 최적!"),
+             ("📊 경영 컨설턴트", "분석력과 전략적 사고로 기업 성장을 이끌어요!")]
 }
 
-# Streamlit 앱
-st.title("MBTI 기반 진로 추천 🎓")
-st.write("당신의 MBTI를 선택하면 적절한 직업을 추천해드립니다!")
+# 페이지 설정
+st.set_page_config(page_title="MBTI Career Finder 🎓", page_icon="🌟", layout="centered")
+
+# 헤더
+st.markdown("<h1 style='text-align: center; color: #FF5733;'>🌈 MBTI 기반 진로 추천 🎓</h1>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center; color: #33C1FF;'>당신의 성격이 반짝이는 직업을 찾아보세요 ✨</h3>", unsafe_allow_html=True)
 
 # MBTI 선택 박스
-mbti = st.selectbox("MBTI를 선택하세요:", list(job_recommendations.keys()))
+mbti = st.selectbox("💡 MBTI를 선택하세요:", list(job_recommendations.keys()))
 
-# 추천 결과 출력
+# 결과 출력
 if mbti:
-    st.subheader(f"👉 {mbti} 유형에 적합한 직업 추천")
-    for job in job_recommendations[mbti]:
-        st.write(f"- {job}")
+    st.markdown(f"## 🔮 {mbti} 유형에 어울리는 직업 추천 🌟")
+    for job, reason in job_recommendations[mbti]:
+        st.markdown(f"### {job}")
+        st.write(f"👉 {reason}")
+        st.write("---")
 
+# 푸터
+st.markdown("<br><br><h4 style='text-align: center; color: gray;'>💖 Made with Streamlit | Explore Your Future 🚀</h4>", unsafe_allow_html=True)
