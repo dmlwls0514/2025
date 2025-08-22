@@ -1,41 +1,24 @@
 import streamlit as st
-from PIL import Image
 
-st.set_page_config(page_title="나만의 브랜드 만들기", layout="centered")
+st.title("🎯 광고 예산 분배 게임 💰")
+st.write("당신은 마케터입니다! 100만 원의 예산을 어떻게 쓸까요?")
 
-st.title("✨ 나만의 브랜드 만들기 ✨")
-st.write("당신만의 브랜드를 만들어보세요! 이름, 슬로건, 컬러, 로고까지 한눈에 확인할 수 있어요.")
+# 예산 입력
+insta = st.slider("📱 인스타그램 광고 (만원)", 0, 100, 30)
+tv = st.slider("📺 TV 광고 (만원)", 0, 100, 50)
+flyer = st.slider("📰 전단지 광고 (만원)", 0, 100, 20)
 
-# 1. 브랜드 이름 입력
-brand_name = st.text_input("브랜드 이름을 입력하세요:")
+total = insta + tv + flyer
 
-# 2. 브랜드 슬로건 입력
-brand_slogan = st.text_input("브랜드 슬로건을 입력하세요:")
+if total > 100:
+    st.error("❌ 총 예산이 100만 원을 초과했습니다! 다시 조정하세요.")
+else:
+    st.success(f"✅ 총 {total}만 원 사용 중")
 
-# 3. 브랜드 대표 색상 선택
-brand_color = st.color_picker("브랜드 대표 색상을 선택하세요:")
+    if st.button("📊 시뮬레이션 실행하기"):
+        reach = insta*50 + tv*30 + flyer*10
+        awareness = insta*0.4 + tv*0.5 + flyer*0.2
 
-# 4. 로고 업로드
-logo_file = st.file_uploader("브랜드 로고를 업로드하세요:", type=["png", "jpg", "jpeg"])
-
-# 5. 브랜드 카테고리 선택
-category = st.selectbox("브랜드 카테고리를 선택하세요:", ["패션", "식품", "테크", "뷰티", "기타"])
-
-# 6. 결과 표시
-if st.button("브랜드 만들기"):
-    st.markdown(f"## 🏷 {brand_name}")
-    st.markdown(f"**슬로건:** {brand_slogan}")
-    st.markdown(f"**카테고리:** {category}")
-    
-    # 대표 색상 박스
-    st.markdown(f"""
-    <div style="width:100px; height:50px; background-color:{brand_color}; border-radius:5px"></div>
-    """, unsafe_allow_html=True)
-    
-    # 로고 표시
-    if logo_file:
-        image = Image.open(logo_file)
-        st.image(image, caption="브랜드 로고", use_column_width=True)
-    
-    st.success("🎉 나만의 브랜드가 완성되었습니다!")
-
+        st.subheader("🔮 결과")
+        st.write(f"👥 예상 도달 고객 수: {reach}명")
+        st.write(f"📈 브랜드 인지도 상승률: {awareness*100:.1f}%")
