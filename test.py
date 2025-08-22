@@ -1,7 +1,6 @@
 import streamlit as st
 import time
 import random
-from streamlit.elements import slider
 
 st.set_page_config(page_title="마케팅 회피 게임 🎮", layout="wide")
 
@@ -30,10 +29,20 @@ if 'last_item_time' not in st.session_state:
     st.session_state.last_item_time = time.time()
 
 # 장애물 생성
-if random.random() < 0.05:  # 장애물 등장 확률
+if random.random() < 0.05:
     st.session_state.obstacles.append([random.random(), 0.0])  # x, y 비율
 
 # 아이템 생성 (15초마다)
 if time.time() - st.session_state.last_item_time > 15:
     st.session_state.items.append([random.random(), 0.0])
-    st.session_state_
+    st.session_state.last_item_time = time.time()
+
+# 캐릭터 이동 슬라이더 (streamlit 기본 제공)
+st.session_state.char_x = st.slider("🕹️ 캐릭터 위치", 0.0, 1.0, st.session_state.char_x, step=0.01)
+
+# 화면 그리기
+canvas_height = 400
+canvas_width = 600
+st.write("⬇️ 회피 게임 화면")
+
+# 나머지 코드 그대로...
