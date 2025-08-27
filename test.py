@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import altair as alt
 
 st.set_page_config(page_title="🛍️ 소비자 트렌드 퀴즈", layout="centered")
 st.title("🛍️ 소비자 트렌드 퀴즈")
@@ -29,20 +30,29 @@ if st.button("🎉 결과 확인"):
     st.subheader("📊 영역별 점수 그래프")
 
     df = pd.DataFrame(list(category_scores.items()), columns=["영역", "점수"])
-    df = df.set_index("영역")
 
-    # Streamlit 내장 막대 그래프
-    st.bar_chart(df)
+    # Altair 그래프 (핑크색 통일)
+    chart = (
+        alt.Chart(df)
+        .mark_bar(cornerRadiusTopLeft=10, cornerRadiusTopRight=10, color="#FF69B4")  # 핫핑크
+        .encode(
+            x=alt.X("영역:N", sort=None, axis=alt.Axis(labelAngle=0)),
+            y="점수:Q",
+            tooltip=["영역", "점수"]
+        )
+    )
 
-    # 점수 표시 메시지
+    st.altair_chart(chart, use_container_width=True)
+
+    # 점수 계산
     total_score = sum(category_scores.values())
     max_score = sum([max(q["score"]) for q in questions])
     similarity = total_score / max_score * 100
     st.write(f"당신은 MZ세대 소비 성향과 **{similarity:.1f}%** 비슷합니다!")
 
     if similarity > 80:
-        st.write("🔥 완전 MZ세대형! 트렌드에 민감하고 새로운 걸 좋아하네요.")
+        st.success("🔥 완전 MZ세대형! 트렌드에 민감하고 새로운 걸 좋아하네요.")
     elif similarity > 50:
-        st.write("😊 어느 정도 MZ세대 성향이 있어요. 트렌드를 잘 활용하세요!")
+        st.info("😊 어느 정도 MZ세대 성향이 있어요. 트렌드를 잘 활용하세요!")
     else:
-        st.write("😌 전통적 소비형! 안정적이고 계획적인 소비를 선호해요.")
+        st.warning("😌 전통적 소비형! 안정적이고 계획적인 소비를 선호해요.")
