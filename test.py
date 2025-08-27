@@ -1,6 +1,6 @@
 # 아이템 이동
 new_items = []
-for ix, iy in st.session_state.items:
+for ix, iy in st.seion_state.items:
     iy += 0.015
     if iy < 1.0:
         new_items.append([ix, iy])
