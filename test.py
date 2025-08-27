@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="🛍️ 소비자 트렌드 퀴즈", layout="centered")
 st.title("🛍️ 소비자 트렌드 퀴즈")
-st.write("아래 질문에 답하면 당신의 소비 성향이 MZ세대와 얼마나 비슷한지 그래프로 보여드려요!")
+st.write("아래 질문에 답하면 당신의 소비 성향이 MZ세대와 얼마나 비슷한지 보여드려요!")
 
 # 질문과 점수
 questions = [
@@ -18,9 +17,9 @@ questions = [
     {"q": "가격과 품질 선택", "options":["품질 최우선 🌟","가격/품질 균형 ⚖️","가격 최우선 💸","상관 없음 😎"], "score":[3,2,1,0], "category":"소비 성향"},
 ]
 
-# 선택과 점수
 category_scores = {"라이프스타일":0, "트렌드 민감도":0, "소비 성향":0}
 
+# 질문 표시
 for i, q in enumerate(questions):
     choice = st.radio(q["q"], q["options"], key=f"q{i}")
     category_scores[q["category"]] += q["score"][q["options"].index(choice)]
@@ -29,16 +28,21 @@ for i, q in enumerate(questions):
 if st.button("🎉 결과 확인"):
     st.subheader("📊 영역별 점수 그래프")
 
-    # 데이터프레임 생성
     df = pd.DataFrame(list(category_scores.items()), columns=["영역", "점수"])
+    df = df.set_index("영역")
 
-    # 그래프 그리기
-    fig, ax = plt.subplots()
-    ax.bar(df["영역"], df["점수"], color=["#FF6F61","#6B5B95","#88B04B"])
-    ax.set_ylim(0, max(df["점수"])+1)
-    ax.set_ylabel("점수")
-    ax.set_title("당신의 소비 성향 영역별 점수")
-    for i, v in enumerate(df["점수"]):
-        ax.text(i, v + 0.1, str(v), ha='center', fontweight='bold')
+    # Streamlit 내장 막대 그래프
+    st.bar_chart(df)
 
-    st.pyplot(fig)
+    # 점수 표시 메시지
+    total_score = sum(category_scores.values())
+    max_score = sum([max(q["score"]) for q in questions])
+    similarity = total_score / max_score * 100
+    st.write(f"당신은 MZ세대 소비 성향과 **{similarity:.1f}%** 비슷합니다!")
+
+    if similarity > 80:
+        st.write("🔥 완전 MZ세대형! 트렌드에 민감하고 새로운 걸 좋아하네요.")
+    elif similarity > 50:
+        st.write("😊 어느 정도 MZ세대 성향이 있어요. 트렌드를 잘 활용하세요!")
+    else:
+        st.write("😌 전통적 소비형! 안정적이고 계획적인 소비를 선호해요.")
